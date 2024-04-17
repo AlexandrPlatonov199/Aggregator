@@ -36,6 +36,7 @@ async def process_message(message: types.Message):
         message (types.Message): The message object representing the user's message.
 
     """
+    print(f"Входные данные: {message.text}")
     try:
         data = eval(message.text)
         result = await Aggregator().aggregate_payments(
@@ -43,6 +44,7 @@ async def process_message(message: types.Message):
             dt_upto=data['dt_upto'],
             group_type=data['group_type'],
             )
+        print(result)
         await message.answer(str(result))
     except Exception as e:
         print(e)

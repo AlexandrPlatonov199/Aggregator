@@ -3,7 +3,7 @@
 This module provides a class `Aggregator` for aggregating payment data.
 
 """
-
+import json
 from datetime import datetime
 
 import aiofiles
@@ -102,8 +102,13 @@ class Aggregator:
 
             # Prepares the final dataset and corresponding labels for further processing.
             dataset = df_full_range['value'].tolist()
-            labels = [idx.strftime('%Y-%m-%dT%H:%M:%S') for idx in df_full_range['dt']]
+            labels = [idx.to_timestamp(how='start').strftime('%Y-%m-%dT%H:%M:%S') for idx in df_full_range['dt']]
 
-            return {'dataset': dataset, 'labels': labels}
+            result = {
+                "dataset": dataset,
+                "labels": labels
+            }
 
+            json_result = json.dumps(result)
 
+            return json_result
